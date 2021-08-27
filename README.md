@@ -1,14 +1,14 @@
 # Parser-Loli
 
 
-### Install modules:
+## Requirements:
 
-pip install bs4
+  pip install bs4
 
-pip install lxml
+  pip install lxml
 
-pip install requests
+  pip install requests
 
-### Run:
+## Run:
 
-python main.py
+  python main.py
