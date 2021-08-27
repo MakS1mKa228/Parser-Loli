@@ -1,3 +1,4 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 from random import randint
@@ -22,6 +23,7 @@ def getPagesCount():
 def randomLoliPicture():
     global count
     count = 0
+    os.system("mkdir loli")
     for page in range(getPagesCount()):
         ret = []
         resp = requests.get(f'https://anime-pictures.net/pictures/view_posts/{page}?search_tag=loli&order_by=date&ldate=0&lang=ru')
