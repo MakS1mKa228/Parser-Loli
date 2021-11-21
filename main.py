@@ -1,4 +1,5 @@
 import os
+from typing import Counter
 import requests
 from bs4 import BeautifulSoup
 from random import randint
@@ -24,10 +25,12 @@ def randomLoliPicture():
     global count
     count = 0
     os.system("mkdir loli")
-    for page in range(getPagesCount()):
-        ret = []
+    c = getPagesCount()
+
+    for page in range(0,c):
         resp = requests.get(f'https://anime-pictures.net/pictures/view_posts/{page}?search_tag=loli&order_by=date&ldate=0&lang=ru')
         soup = BeautifulSoup(resp.text, 'lxml')
+        ret = []
         for link in soup.find_all('a'):
             tmp = link.get('href')[1:].split('/')
             try:
@@ -36,28 +39,29 @@ def randomLoliPicture():
             except IndexError:
                 pass
         try:
-            link = f'https://anime-pictures.net/{ret[randint(1, len(ret))]}'
-            try:
-                resp = requests.get(link)
-            except:
-                raise Exception('Subpage Error')
+            for i in range(0, len(ret)):
+                link = f'https://anime-pictures.net/{ret[i]}'
+                try:
+                    resp = requests.get(link)
+                except:
+                    raise Exception('Subpage Error')
 
-            soup = BeautifulSoup(resp.text, 'lxml')
-            try:
-                count+=1
-                imgtag = soup.find_all('img', {"id": "big_preview"}).pop()
-                imglink = f"http:{imgtag.get('src')}"
-                print(count, ")" , imglink)
+                soup = BeautifulSoup(resp.text, 'lxml')
+                try:
+                    count+=1
+                    imgtag = soup.find_all('img', {"id": "big_preview"}).pop()
+                    imglink = f"http:{imgtag.get('src')}"
+                    print(count, ")" , imglink)
 
-                filename = imglink.split('/')[-1]
-                r = requests.get(imglink, allow_redirects=True)
-                open(f"./loli/{filename}", 'wb').write(r.content)
+                    filename = imglink.split('/')[-1]
+                    r = requests.get(imglink, allow_redirects=True)
+                    open(f"./loli/{filename}", 'wb').write(r.content)
 
-                print("Успешно скачано!")
-            except:
-                pass
+                    print("Успешно скачано!")
+                except:
+                    pass
         except:
             pass
 
-print(randomLoliPicture())
+randomLoliPicture()
 
